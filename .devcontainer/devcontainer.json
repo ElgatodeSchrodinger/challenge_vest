@@ -1,0 +1,19 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.166.1/containers/docker-existing-dockerfile
+{
+	"name": "FastAPI Dev",
+	"context": "..",
+	"dockerFile": "../Dockerfile",
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance"
+	],
+	"postCreateCommand": "pip3 install -r requirements.txt",
+	"settings": {
+		"python.pythonPath": "/usr/local/bin/python",
+		"python.linting.pylintEnabled": true,
+		"python.linting.pylintPath": "/usr/local/bin/pylint",
+		"python.linting.enabled": true,
+		"python.formatting.blackArgs": ["-l", "100"]
+	}
+}
