@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from app.services.db import Base
+from services.db import Base
 
 
 class StockHistory(Base):

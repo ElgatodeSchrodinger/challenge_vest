@@ -1,10 +1,9 @@
-from app.services import BaseService
-
+from services import BaseService
+from api.stocks.dtos.stock import StockDataDTO
 
 class NASDAQService(BaseService):
 
     def __init__(self):
-        
         connection_values = {
             'headers': {
                 'user-agent': (
@@ -18,4 +17,4 @@ class NASDAQService(BaseService):
 
     def get_stock_by_symbol(self, symbol: str):
         url_format = '/quote/{symbol}/info?assetclass=stocks'
-        return self._get(url_format, {'symbol': symbol})
+        return self._get(url_format, {'symbol': symbol}).get('data')

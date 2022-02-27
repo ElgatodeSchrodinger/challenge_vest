@@ -2,9 +2,9 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
 
-from app.services.db import Base
-from app.services.models.share_transaction import ShareTransaction
-from app.services.models.stock_history import StockHistory
+from services.db import Base
+from services.db.models.share_transaction import ShareTransaction
+from services.db.models.stock_history import StockHistory
 
 
 class Company(Base):
