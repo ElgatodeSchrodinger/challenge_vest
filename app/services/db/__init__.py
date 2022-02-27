@@ -1,11 +1,13 @@
-import os, time
-
 from sqlalchemy import create_engine
-from sqlalchemy.orm import close_all_sessions, sessionmaker, registry
-from sqlalchemy.engine import url
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-# Conexión a una base de datos SQL por medio del ORM SQL Alchemy.
-# Es agnóstico a la base de datos misma (MySQL, Postgres, etc).
+from app.core.config import settings
+
+engine = create_engine(settings.SQLALCHEMY_DATABASE_URI, pool_pre_ping=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
 
 class SQLAlchemyClient():
 

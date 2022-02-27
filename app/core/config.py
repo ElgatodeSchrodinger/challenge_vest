@@ -1,5 +1,6 @@
+import os
 from pydantic import BaseSettings, validator
 
 
 class Settings(BaseSettings):
-    pass
+    SQLALCHEMY_DATABASE_URI: str = os.getenv('SQLITE_DATABASE_URL', 'sqlite:///./database.db')
