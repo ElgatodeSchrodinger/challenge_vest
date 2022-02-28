@@ -1,5 +1,6 @@
 from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
+from services.nasdaq import NASDAQService
 
 float_characters = '1234567890.'
 
@@ -17,7 +18,7 @@ class StockDataDTO:
         currency_symbol, price = self._decompose_price(self.lastSalePrice)
         return {
             'currency_symbol': currency_symbol,
-            'price': price,
+            'price': float(price),
         }
     
     @staticmethod
@@ -65,3 +66,15 @@ class StockHistoryDTO:
     def extract_stock_info(self):
         stock_data = StockDataDTO(**self.primaryData)
         return stock_data.extract_current_info()
+
+    
+class StockNasdaqDTO(object):
+
+    def __init__(self, symbol):
+        self._symbol = symbol
+        self.nasdaq_service = NASDAQService()
+    
+    def get_current_info_nasdaq(self):
+        nasdaq_stock_info = self.nasdaq_service.get_stock_by_symbol(self._symbol)
+        
+        return StockHistoryDTO(**nasdaq_stock_info)

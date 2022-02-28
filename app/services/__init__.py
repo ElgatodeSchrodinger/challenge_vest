@@ -9,13 +9,7 @@ class BaseService:
         self._headers = kwargs.get('headers')
 
     def _get(self, endpoint, values: dict = None):
-        print("---------")
-        print(endpoint)
-        print(values)
         endpoint = format_string_with_dict(endpoint, values)
-        print(endpoint)
         url = self._base_url + endpoint
         response = requests.get(url, headers=self._headers)
         return response.json()
-
-

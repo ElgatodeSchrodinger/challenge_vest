@@ -1,5 +1,5 @@
 from services import BaseService
-from api.stocks.dtos.stock import StockDataDTO
+
 
 class NASDAQService(BaseService):
 
