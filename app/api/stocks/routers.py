@@ -20,13 +20,16 @@ def healthcheck():
 
 
 @stock.post('/transfers', response_model=ShareTransactionSchema)
-def transfer_stocks(transaction: TransactionSchemaInput, db: Session = Depends(get_db)):
+def transfer_stocks(
+        transaction: TransactionSchemaInput,
+        db: Session = Depends(get_db)):
 
     symbol = transaction.symbol
     share_transaction_repository = ShareTransactionRepository(db)
     nasdaq_stock_data = NASDAQService().get_stock_by_symbol(symbol)
     nasdaq_stock_dto = StockHistoryDTO(**nasdaq_stock_data)
-    transaction_obj = share_transaction_repository.create(transaction, nasdaq_stock_dto)
+    transaction_obj = share_transaction_repository.create(
+        transaction, nasdaq_stock_dto)
     return transaction_obj
 
 
@@ -36,7 +39,9 @@ def holding_stocks_information(db: Session = Depends(get_db)):
     stock_history_repository = StockHistoryRepository(db)
     company_repository = SQLAlchemyCompanyRepository(db)
     all_transactions = share_transaction_repository.get_all_share_transactions()
-    unique_companies_ids = list(set([transaction.company.id for transaction in all_transactions]))
+    unique_companies_ids = list(
+        set([transaction.company.id for transaction in all_transactions])
+        )
     stocks_info = []
     for company_id in unique_companies_ids:
         company = company_repository.get_company_by_id(company_id=company_id)
@@ -44,8 +49,10 @@ def holding_stocks_information(db: Session = Depends(get_db)):
         stock_info = {}
         stock_info['name'] = company.name
         stock_info['symbol'] = company.symbol
-        stock_info['indicators_data'] = share_transaction_repository.get_margen_value_indicators(company_id, stock_dto)
-        stock_info['current_day_prices'] = stock_history_repository.get_current_day_indicators(company_id)
+        stock_info['indicators_data'] = share_transaction_repository \
+            .get_margen_value_indicators(company_id, stock_dto)
+        stock_info['current_day_prices'] = stock_history_repository \
+            .get_current_day_indicators(company_id)
         stocks_info.append(stock_info)
 
     return {

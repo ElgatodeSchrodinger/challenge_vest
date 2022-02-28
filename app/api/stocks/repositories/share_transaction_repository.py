@@ -1,13 +1,9 @@
 from fastapi.encoders import jsonable_encoder
-import pprint
 from api.stocks.schemas.enums import TransactionType
-
 from api.stocks.schemas.models import TransactionSchemaInput
 from services.db.models.share_transaction import ShareTransaction
-from services.db.models.company import Company
 from api.stocks.repositories import SQLAlchemyCompanyRepository
-from api.stocks.dtos.stock import StockHistoryDTO
-from services.nasdaq import NASDAQService
+
 
 class ShareTransactionRepository():
 
@@ -17,17 +13,25 @@ class ShareTransactionRepository():
         self.test = test
         self.company_repository = SQLAlchemyCompanyRepository(session)
 
-    def create(self, transaction: TransactionSchemaInput, nasdaq_stock_data):
+    def create(
+            self, 
+            transaction: TransactionSchemaInput, 
+            nasdaq_stock_data):
         transaction_data = self._fill_related_fields(transaction, nasdaq_stock_data)
         share_transaction_obj = ShareTransaction(**transaction_data)
         self.session.add(share_transaction_obj)
         self.session.commit()
         return share_transaction_obj
-    
-    def _fill_related_fields(self, transaction: TransactionSchemaInput, nasdaq_stock_data):
+
+    def _fill_related_fields(
+            self,
+            transaction: TransactionSchemaInput,
+            nasdaq_stock_data):
+
         transaction_in_data = jsonable_encoder(transaction)
         symbol = transaction_in_data.pop("symbol")
-        company = self.company_repository.get_or_create_company(symbol, nasdaq_stock_data)
+        company = self.company_repository.get_or_create_company(
+            symbol, nasdaq_stock_data)
         stock_info = nasdaq_stock_data.extract_stock_info()
         stock_info.update(
             {
@@ -45,14 +49,14 @@ class ShareTransactionRepository():
         )
 
     def get_share_transactions_by_company(self, company_id):
-        
+
         return (
             self.session
             .query(ShareTransaction)
             .filter_by(company_id=company_id)
             .all()
         )
-    
+
     @staticmethod
     def factor_transaction_type(type: str):
         print(type)
@@ -60,7 +64,7 @@ class ShareTransactionRepository():
             return 1
         elif type == TransactionType.sell:
             return -1
-    
+
     @staticmethod
     def compute_margen_percentage(current_value, initial_value):
         if not initial_value:
@@ -73,25 +77,27 @@ class ShareTransactionRepository():
     def get_margen_value_indicators(self, company_id, stock_dto):
         transactions = self.get_share_transactions_by_company(company_id)
         stock_current_info = stock_dto.extract_stock_info()
-        currency_symbol = transactions[0].currency_symbol if transactions else ''
+        currency_symbol = transactions[0].currency_symbol \
+            if transactions else ''
         held_shares = sum(
             [
-                transaction.qty * 
-                self.factor_transaction_type(transaction.transaction_type) 
+                transaction.qty *
+                self.factor_transaction_type(transaction.transaction_type)
                 for transaction in transactions
             ]
         )
         total_value = sum(
             [
-                transaction.qty * transaction.price * 
-                self.factor_transaction_type(transaction.transaction_type) 
+                transaction.qty * transaction.price *
+                self.factor_transaction_type(transaction.transaction_type)
                 for transaction in transactions
             ]
         )
         current_value = stock_current_info.get('price') * held_shares
 
         return {
-            "margen_percentage": self.compute_margen_percentage(current_value, total_value),
+            "margen_percentage": self.compute_margen_percentage(
+                current_value, total_value),
             "held_shares": held_shares,
             "total_value_shares": currency_symbol + str(round(total_value, 2))
         }
