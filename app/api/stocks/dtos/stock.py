@@ -70,11 +70,10 @@ class StockHistoryDTO:
     
 class StockNasdaqDTO(object):
 
-    def __init__(self, symbol):
-        self._symbol = symbol
+    def __init__(self):
         self.nasdaq_service = NASDAQService()
     
-    def get_current_info_nasdaq(self):
-        nasdaq_stock_info = self.nasdaq_service.get_stock_by_symbol(self._symbol)
+    def get_current_info_nasdaq(self, symbol):
+        nasdaq_stock_info = self.nasdaq_service.get_stock_by_symbol(symbol)
         
         return StockHistoryDTO(**nasdaq_stock_info)

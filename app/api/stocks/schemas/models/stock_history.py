@@ -14,7 +14,11 @@ class StockHistoryTotal(StockHistoryBase):
     pass
 
 
-class StockHistory(StockHistoryTotal):
+class StockHistoryInput(StockHistoryBase):
+    pass
+
+
+class StockHistorySchema(StockHistoryTotal):
     id: int
     company_id: int
 

@@ -1,5 +1,5 @@
 from services import BaseService
-
+from exceptions import ClientException
 
 class NASDAQService(BaseService):
 
@@ -17,4 +17,16 @@ class NASDAQService(BaseService):
 
     def get_stock_by_symbol(self, symbol: str):
         url_format = '/quote/{symbol}/info?assetclass=stocks'
-        return self._get(url_format, {'symbol': symbol}).get('data')
+        response = self._get(url_format, {'symbol': symbol})
+
+        status_code = response.get('status', {}).get('rCode')
+
+        if status_code in (200,):
+            return response.get('data')
+        elif status_code >= 400:
+            message = response \
+                .get('status', {}) \
+                .get('bCodeMessage')[0] \
+                .get('errorMessage')
+            raise ClientException(message, status_code)
+

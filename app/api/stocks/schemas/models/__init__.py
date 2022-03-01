@@ -7,5 +7,6 @@ from .share_transactions import (
 from .stock_history import (
     StockHistoryBase,
     StockHistoryTotal,
-    StockHistory,
+    StockHistoryInput,
+    StockHistorySchema,
 )

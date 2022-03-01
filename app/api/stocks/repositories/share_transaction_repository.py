@@ -3,6 +3,7 @@ from api.stocks.schemas.enums import TransactionType
 from api.stocks.schemas.models import TransactionSchemaInput
 from services.db.models.share_transaction import ShareTransaction
 from api.stocks.repositories import SQLAlchemyCompanyRepository
+from utils import compute_margen_percentage
 
 
 class ShareTransactionRepository():
@@ -13,15 +14,37 @@ class ShareTransactionRepository():
         self.test = test
         self.company_repository = SQLAlchemyCompanyRepository(session)
 
+    @staticmethod
+    def factor_transaction_type(type: str):
+        if type == TransactionType.buy:
+            return 1
+        elif type == TransactionType.sell:
+            return -1
+
     def create(
             self,
             transaction: TransactionSchemaInput,
-            nasdaq_stock_data):
+            nasdaq_stock_data
+            ):
+        if not self._is_posible(transaction):
+            return None
+
         transaction_data = self._fill_related_fields(transaction, nasdaq_stock_data)
         share_transaction_obj = ShareTransaction(**transaction_data)
         self.session.add(share_transaction_obj)
         self.session.commit()
         return share_transaction_obj
+
+    def _is_posible(
+            self,
+            transaction: TransactionSchemaInput
+            ):
+        if transaction.transaction_type == TransactionType.buy:
+            return True
+        transactions = self.get_share_transactions_by_symbol(transaction.symbol)
+        held_shares = transactions and self._compute_held_shares(transactions)
+        return held_shares and \
+            held_shares >= transaction.qty
 
     def _fill_related_fields(
             self,
@@ -57,46 +80,47 @@ class ShareTransactionRepository():
             .all()
         )
 
-    @staticmethod
-    def factor_transaction_type(type: str):
-        print(type)
-        if type == TransactionType.buy:
-            return 1
-        elif type == TransactionType.sell:
-            return -1
+    def get_share_transactions_by_symbol(self, symbol):
+        company = self.company_repository.get_company_by_symbol(symbol)
+        if company:
+            return (
+                self.session
+                .query(ShareTransaction)
+                .filter_by(company_id=company.id)
+                .all()
+            )
+        else:
+            return None
 
-    @staticmethod
-    def compute_margen_percentage(current_value, initial_value):
-        if not initial_value:
-            return "0%"
-        diff_amount = current_value - initial_value
-        diff_percentual = round((diff_amount / initial_value) * 100, 2)
-        sign = '+' if diff_percentual > 0 else ''
-        return sign + str(diff_percentual) + "%"
-
-    def get_margen_value_indicators(self, company_id, stock_dto):
-        transactions = self.get_share_transactions_by_company(company_id)
-        stock_current_info = stock_dto.extract_stock_info()
-        currency_symbol = transactions[0].currency_symbol \
-            if transactions else ''
-        held_shares = sum(
+    def _compute_held_shares(self, transactions):
+        return sum(
             [
                 transaction.qty *
                 self.factor_transaction_type(transaction.transaction_type)
                 for transaction in transactions
             ]
         )
-        total_value = sum(
+
+    def _compute_total_value_shares(self, transactions):
+        return sum(
             [
                 transaction.qty * transaction.price *
                 self.factor_transaction_type(transaction.transaction_type)
                 for transaction in transactions
             ]
         )
+
+    def get_margen_value_indicators(self, company_id, stock_dto):
+        transactions = self.get_share_transactions_by_company(company_id)
+        stock_current_info = stock_dto.extract_stock_info()
+        currency_symbol = transactions[0].currency_symbol \
+            if transactions else ''
+        held_shares = self._compute_held_shares(transactions)
+        total_value = self._compute_total_value_shares(transactions)
         current_value = stock_current_info.get('price') * held_shares
 
         return {
-            "margen_percentage": self.compute_margen_percentage(
+            "margen_percentage": compute_margen_percentage(
                 current_value, total_value),
             "held_shares": held_shares,
             "total_value_shares": currency_symbol + str(round(total_value, 2))

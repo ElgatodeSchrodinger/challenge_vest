@@ -1,5 +1,5 @@
 from services.db.models.company import Company
-from api.stocks.dtos.stock import StockHistoryDTO
+
 
 class SQLAlchemyCompanyRepository():
 
@@ -17,6 +17,14 @@ class SQLAlchemyCompanyRepository():
 
         company = self.session.query(Company).filter_by(symbol=symbol).first()
         return company
+
+    def get_all(self):
+        return (
+            self.session
+            .query(Company)
+            .filter()
+            .all()
+        )
 
     def create(self, symbol: str, nasdaq_stock_data):
         

@@ -3,12 +3,12 @@ from api.stocks.schemas.enums import TransactionType
 from datetime import datetime
 
 class TransactionSchemaBase(BaseModel):
-    qty: str
+    qty: int
     symbol: str
     transaction_type: TransactionType
 
 class TransactionSchema(BaseModel):
-    qty: str
+    qty: int
     transaction_type: TransactionType
 
 
