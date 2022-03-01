@@ -14,8 +14,8 @@ class ShareTransactionRepository():
         self.company_repository = SQLAlchemyCompanyRepository(session)
 
     def create(
-            self, 
-            transaction: TransactionSchemaInput, 
+            self,
+            transaction: TransactionSchemaInput,
             nasdaq_stock_data):
         transaction_data = self._fill_related_fields(transaction, nasdaq_stock_data)
         share_transaction_obj = ShareTransaction(**transaction_data)
@@ -72,7 +72,7 @@ class ShareTransactionRepository():
         diff_amount = current_value - initial_value
         diff_percentual = round((diff_amount / initial_value) * 100, 2)
         sign = '+' if diff_percentual > 0 else ''
-        return sign + str(abs(diff_percentual)) + "%"
+        return sign + str(diff_percentual) + "%"
 
     def get_margen_value_indicators(self, company_id, stock_dto):
         transactions = self.get_share_transactions_by_company(company_id)
