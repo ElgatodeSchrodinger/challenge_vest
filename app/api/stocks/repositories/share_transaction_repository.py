@@ -23,7 +23,6 @@ class ShareTransactionRepository:
     def create(self, transaction: TransactionSchemaInput, nasdaq_stock_data):
         if not self._is_posible(transaction):
             return None
-        print("Creando transacción")
         transaction_data = self._fill_related_fields(
             transaction, nasdaq_stock_data
         )
@@ -36,11 +35,9 @@ class ShareTransactionRepository:
         if transaction.transaction_type == TransactionType.buy:
             return True
         transactions = self.get_by_symbol(transaction.symbol)
-        print(transactions)
         held_shares = (
             transactions and self._compute_held_shares(transactions) or 0
         )
-        print(held_shares)
         return held_shares >= transaction.qty
 
     def _fill_related_fields(
@@ -74,7 +71,6 @@ class ShareTransactionRepository:
 
     def get_by_symbol(self, symbol):
         company = self.company_repository.get_by_symbol(symbol)
-        print(company.id)
         if company:
             return (
                 self.session.query(ShareTransaction)
