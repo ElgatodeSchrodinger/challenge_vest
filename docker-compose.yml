@@ -2,6 +2,7 @@ version: "2"
 
 services:
   website:
+    container_name: vest_challenge
     build: .
     command: >
       uvicorn
