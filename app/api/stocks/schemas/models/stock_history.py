@@ -1,5 +1,3 @@
-
-
 from pydantic import BaseModel
 from api.stocks.schemas.enums import TransactionType
 from datetime import datetime

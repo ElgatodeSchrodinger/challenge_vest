@@ -1,3 +1,3 @@
-from .company_repository import SQLAlchemyCompanyRepository
+from .company_repository import CompanyRepository
 from .share_transaction_repository import ShareTransactionRepository
 from .stock_history_repository import StockHistoryRepository

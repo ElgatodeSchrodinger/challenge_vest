@@ -5,11 +5,14 @@ from fastapi_utils.session import FastAPISessionMaker
 
 from core.config import settings
 
-engine = create_engine(settings.SQLALCHEMY_DATABASE_URI, connect_args={"check_same_thread": False})
+engine = create_engine(
+    settings.SQLALCHEMY_DATABASE_URI, connect_args={"check_same_thread": False}
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 sessionmakerFastAPI = FastAPISessionMaker(settings.SQLALCHEMY_DATABASE_URI)
+
 
 def get_db():
     session = SessionLocal()
@@ -18,9 +21,3 @@ def get_db():
         session.commit()
     finally:
         session.close()
-
-class SQLAlchemyClient():
-
-    def __init__(self):
-
-        pass

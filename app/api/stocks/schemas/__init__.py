@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from .models import CompanyBase
 from datetime import datetime
 
+
 class IndicatorDataSchema(BaseModel):
     margen_percentage: str
     held_shares: int
@@ -14,6 +15,7 @@ class CurrentPricesSchema(BaseModel):
     highest: str
     average: str
 
+
 class StockInformationResponseModel(CompanyBase):
     indicators_data: IndicatorDataSchema
     current_day_prices: CurrentPricesSchema
@@ -22,7 +24,9 @@ class StockInformationResponseModel(CompanyBase):
 class StocksInformationResponseModel(BaseModel):
     stocks: List[StockInformationResponseModel]
 
+
 ##########
+
 
 class HistoryResponseModel(BaseModel):
     price: str

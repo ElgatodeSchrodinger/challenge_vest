@@ -14,5 +14,7 @@ class Company(Base):
     name = Column(String, index=True)
     symbol = Column(String, unique=True, index=True)
 
-    share_transactions = relationship(ShareTransaction, back_populates="company")
+    share_transactions = relationship(
+        ShareTransaction, back_populates="company"
+    )
     stock_histories = relationship(StockHistory, back_populates="company")

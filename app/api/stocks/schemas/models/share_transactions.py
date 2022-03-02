@@ -2,10 +2,12 @@ from pydantic import BaseModel
 from api.stocks.schemas.enums import TransactionType
 from datetime import datetime
 
+
 class TransactionSchemaBase(BaseModel):
     qty: int
     symbol: str
     transaction_type: TransactionType
+
 
 class TransactionSchema(BaseModel):
     qty: int

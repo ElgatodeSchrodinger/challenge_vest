@@ -2,7 +2,8 @@ from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from services.nasdaq import NASDAQService
 
-float_characters = '1234567890.'
+float_characters = "1234567890."
+
 
 @dataclass
 class StockDataDTO:
@@ -17,19 +18,19 @@ class StockDataDTO:
 
         currency_symbol, price = self._decompose_price(self.lastSalePrice)
         return {
-            'currency_symbol': currency_symbol,
-            'price': float(price),
+            "currency_symbol": currency_symbol,
+            "price": float(price),
         }
-    
+
     @staticmethod
     def _decompose_price(str_price):
 
-        str_price = str_price.strip().replace(' ', '')
+        str_price = str_price.strip().replace(" ", "")
         n = len(str_price)
         i = 0
         for chrt in str_price[::-1]:
             if chrt in float_characters:
-                i+=1
+                i += 1
         limit = n - i
         return str_price[:limit], str_price[limit:]
 
@@ -39,6 +40,7 @@ class StockHistoryDTO:
     """
     Declarar campos de stock
     """
+
     symbol: Optional[str]
     companyName: str
     stockType: str
@@ -55,25 +57,24 @@ class StockHistoryDTO:
 
     def __post_init__(self):
         pass
-    
+
     def extract_company_info(self):
 
         return {
-            'name': self.companyName,
-            'symbol': self.symbol,
+            "name": self.companyName,
+            "symbol": self.symbol,
         }
-    
+
     def extract_stock_info(self):
         stock_data = StockDataDTO(**self.primaryData)
         return stock_data.extract_current_info()
 
-    
-class StockNasdaqDTO(object):
 
+class StockNasdaqDTO(object):
     def __init__(self):
         self.nasdaq_service = NASDAQService()
-    
+
     def get_current_info_nasdaq(self, symbol):
         nasdaq_stock_info = self.nasdaq_service.get_stock_by_symbol(symbol)
-        
+
         return StockHistoryDTO(**nasdaq_stock_info)
