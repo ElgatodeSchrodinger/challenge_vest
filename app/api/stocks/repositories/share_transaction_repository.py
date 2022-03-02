@@ -35,7 +35,7 @@ class ShareTransactionRepository:
     def _is_posible(self, transaction: TransactionSchemaInput):
         if transaction.transaction_type == TransactionType.buy:
             return True
-        transactions = self.get_share_transactions_by_symbol(transaction.symbol)
+        transactions = self.get_by_symbol(transaction.symbol)
         print(transactions)
         held_shares = (
             transactions and self._compute_held_shares(transactions) or 0
@@ -49,7 +49,7 @@ class ShareTransactionRepository:
 
         transaction_in_data = jsonable_encoder(transaction)
         symbol = transaction_in_data.pop("symbol")
-        company = self.company_repository.get_or_create_company(
+        company = self.company_repository.get_or_create(
             symbol, nasdaq_stock_data
         )
         stock_info = nasdaq_stock_data.extract_stock_info()
@@ -61,10 +61,10 @@ class ShareTransactionRepository:
         transaction_in_data.update(stock_info)
         return transaction_in_data
 
-    def get_all_share_transactions(self):
+    def get_all(self):
         return self.session.query(ShareTransaction).all()
 
-    def get_share_transactions_by_company(self, company_id):
+    def get_by_company(self, company_id):
 
         return (
             self.session.query(ShareTransaction)
@@ -72,7 +72,7 @@ class ShareTransactionRepository:
             .all()
         )
 
-    def get_share_transactions_by_symbol(self, symbol):
+    def get_by_symbol(self, symbol):
         company = self.company_repository.get_by_symbol(symbol)
         print(company.id)
         if company:
@@ -104,7 +104,7 @@ class ShareTransactionRepository:
         )
 
     def get_margen_value_indicators(self, company_id, stock_dto):
-        transactions = self.get_share_transactions_by_company(company_id)
+        transactions = self.get_by_company(company_id)
         stock_current_info = stock_dto.extract_stock_info()
         currency_symbol = (
             transactions[0].currency_symbol if transactions else ""

@@ -20,7 +20,7 @@ from fastapi_utils.tasks import repeat_every
 import logging
 
 _logger = logging.getLogger(__name__)
-stock = APIRouter()
+stock = APIRouter(prefix="/stocks", tags=["stocks"])
 
 nasdaq_service = StockNasdaqDTO()
 
@@ -54,12 +54,11 @@ async def transfer_stocks(
         raise HTTPException(status_code=422, detail=message)
 
 
-@stock.get("/mystocks", response_model=StocksInformationResponseModel)
+@stock.get("/my", response_model=StocksInformationResponseModel)
 async def holding_stocks_information(db: Session = Depends(get_db)):
     share_transaction_repository = ShareTransactionRepository(db)
     stock_history_repository = StockHistoryRepository(db)
     company_repository = CompanyRepository(db)
-    all_transactions = share_transaction_repository.get_all_share_transactions()
     unique_companies_ids = company_repository.get_all()
     stocks_info = []
     for company in unique_companies_ids:
@@ -80,7 +79,7 @@ async def holding_stocks_information(db: Session = Depends(get_db)):
     return {"stocks": stocks_info}
 
 
-@stock.get("/stockhistory/{symbol}")
+@stock.get("/history/{symbol}")
 async def information_stock_history(symbol: str, db: Session = Depends(get_db)):
     company_repository = CompanyRepository(db)
     stock_history_repository = StockHistoryRepository(db)

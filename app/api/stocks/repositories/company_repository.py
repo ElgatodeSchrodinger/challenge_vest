@@ -7,7 +7,7 @@ class CompanyRepository:
         self.session = session
         self.test = test
 
-    def get_company_by_id(self, company_id: int):
+    def get_by_id(self, company_id: int):
 
         return self.session.query(Company).filter_by(id=company_id).first()
 
@@ -26,7 +26,7 @@ class CompanyRepository:
         self.session.commit()
         return company_obj
 
-    def get_or_create_company(self, symbol: str, nasdaq_stock_data):
+    def get_or_create(self, symbol: str, nasdaq_stock_data):
         symbol = symbol.strip().upper()
         company = self.get_by_symbol(symbol)
         if not company:

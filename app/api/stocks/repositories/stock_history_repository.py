@@ -33,14 +33,12 @@ class StockHistoryRepository:
         self.session.commit()
         return stock_history_obj
 
-    def get_today_stock_history(
-        self, company_id: int = None, symbol: str = None
-    ):
+    def get_all_today(self, company_id: int = None, symbol: str = None):
         company = None
         if not company_id and symbol:
             company = self.company_repository.get_by_symbol(symbol)
         elif company_id:
-            company = self.company_repository.get_company_by_id(company_id)
+            company = self.company_repository.get_by_id(company_id)
 
         return (
             self.session.query(StockHistory)
@@ -59,9 +57,7 @@ class StockHistoryRepository:
 
     def get_current_day_indicators(self, company_id):
 
-        today_stock_histories = self.get_today_stock_history(
-            company_id=company_id
-        )
+        today_stock_histories = self.get_all_today(company_id=company_id)
         today_prices = [
             stock_history.price for stock_history in today_stock_histories
         ]

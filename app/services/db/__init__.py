@@ -5,9 +5,7 @@ from fastapi_utils.session import FastAPISessionMaker
 
 from core.config import settings
 
-engine = create_engine(
-    settings.SQLALCHEMY_DATABASE_URI
-)
+engine = create_engine(settings.SQLALCHEMY_DATABASE_URI)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
