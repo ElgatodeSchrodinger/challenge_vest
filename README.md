@@ -25,9 +25,11 @@ Run ```docker-compose``` command inside **docker-python** folder.
 
 * Stoping the services: ```docker-compose stop```
 
-By default the microservice will run under the following ports:
+By default the microservice will run under the following port:
 - vest-challenge: 8000
 
+#### Note 🔍
+The FastAPI application will probably throw an exception the first time, because it will try to connect to the PostgreSQL service that is still initializing for the first time; in this case wait for PostgreSQL to fully initialize first and then run the command `docker-compose restart vest_challenge` in another terminal to restart the crashed service.
 
 ## Project Structure
 ---
@@ -84,16 +86,16 @@ The following endpoints have been developed for this API:
 
 Example:
 
-
-    curl --request POST \
-    --url http://localhost:8000/stocks/transfers \
-    --header 'Content-Type: application/json' \
-    --data '{
-        "qty": 5,
-        "symbol": "aapl",
-        "transaction_type": "buy"
-    }'
-
+```curl 
+curl --request POST \
+--url http://localhost:8000/stocks/transfers \
+--header 'Content-Type: application/json' \
+--data '{
+    "qty": 5,
+    "symbol": "aapl",
+    "transaction_type": "buy"
+}'
+```
 
 
 ## Testing ⚙️
@@ -101,7 +103,7 @@ Example:
 To run the tests:
 
 - Have the services running using `docker-compose up`.
-- In another console, run `docker exec -it vest-challenge pytest`.
+- In another console, run `docker exec -it vest_challenge pytest`.
 
 
 ### Authors ✒️
