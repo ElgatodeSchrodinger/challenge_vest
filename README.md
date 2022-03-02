@@ -1,13 +1,110 @@
-# Template for Python FastAPI with Dev Container and Docker
+# Project Name: Vest Challenge
 
-Simple template to get started with FastAPI quickly using Docker and Dev Container for VS Code.
+## Description
+---
+API that simulate a virtual trading environment written with Python using FastAPI, SQL Alchemy.
 
-## Why?
+### Construction 🛠️
+* **Language:** Python 3
+* **Framework:** FastAPI, SQL Alchemy
+* **Database:** PostgreSQL
 
-Using Docker is easy becuase you don't need to install any dependencies other than Docker itslef.
+## Requirements
+---
+- Docker installed
 
-## How does it work?
+## Installation and execution
+---
+Clone or Fork the project.
 
-1. Choose the **Use this Template** button in GitHub to create a new repo with these files or you could clone it instead.
-2. Build with Docker Compose - `docker-compose build`
-3. Run it - `docker-compose up`
+Run ```docker-compose``` command inside **docker-python** folder.
+
+* Building the containers: ```docker-compose build```
+
+* Starting the services: ```docker-compose up -d```
+
+* Stoping the services: ```docker-compose stop```
+
+By default the microservice will run under the following ports:
+- vest-challenge: 8000
+
+
+## Project Structure
+---
+The following diagram describe the project structure used for this API
+```
+challenge_vest
+│   .gitignore          
+│   Dockerfile
+│   README.md                   
+│   docker-compose.yml     
+│   requirements.txt          
+│
+└───app
+│   │   .env
+│   │   exception.py
+│   │   main.py
+│   │   util.py
+│   │
+│   └───api                     Contains all modules for API uses
+│   │   │
+│   │   └───stocks              Module Stock: Contains all related stocks endpoints
+│   │   │   │   routes.py       Routes for stocks
+│   │   │   │
+│   │   │   └───dtos            Uses for Data Transfer Objects needed
+│   │   │   │
+│   │   │   └───repositories    Contains logic with the databases and bussiness rules
+│   │   │   │
+│   │   │   └───schemas         Keep schemas used for this module
+│   │   
+│   └───core                    Used to manage settings of the application
+│   │   
+│   └───services                Modules for external services which the application interact
+│   │   │
+│   │   └───db                  Module for interact with the database
+│   │   │
+│   │   └───nasdaq              Module for NASDAQ Communication
+│   │   
+│   └───tests                   Contains all unit tests for application
+│   │   
+│   └───postman                 Contains documented examples of endpoints usage
+
+```
+
+## Endpoints
+---
+The following endpoints have been developed for this API:
+
+> -  **GET /stocks/my** <br/>
+> Get detailed information about your shares
+> -  **GET /stocks/history/{symbol}** <br/>
+> Get the price records of a stock
+> -  **POST /stocks/transfers** <br/>
+> Allows to create a transaction
+
+Example:
+
+
+    curl --request POST \
+    --url http://localhost:8000/stocks/transfers \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "qty": 5,
+        "symbol": "aapl",
+        "transaction_type": "buy"
+    }'
+
+
+
+## Testing ⚙️
+
+To run the tests:
+
+- Have the services running using `docker-compose up`.
+- In another console, run `docker exec -it vest-challenge pytest`.
+
+
+### Authors ✒️
+
+* **Author:** Javier Quintana, <javier.taipe.1998@gmail.com>
+

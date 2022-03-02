@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "4b7c0358-24a7-4c43-a913-50e95b7c4795",
+		"name": "Vest Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Stock Transactions",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/stocks/transfers",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"stocks",
+						"transfers"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Successful Sale",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"qty\": 5,\r\n    \"symbol\": \"aapl\",\r\n    \"transaction_type\": \"buy\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/stocks/transfers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"stocks",
+								"transfers"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 02 Mar 2022 11:34:54 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "135"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"qty\": 5,\n    \"transaction_type\": \"buy\",\n    \"id\": 3,\n    \"currency_symbol\": \"$\",\n    \"date\": \"2022-03-02T11:34:54.892367+00:00\",\n    \"price\": 164.63,\n    \"company_id\": 1\n}"
+				},
+				{
+					"name": "Not enough Shares",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"qty\": 10,\r\n    \"symbol\": \"aapl\",\r\n    \"transaction_type\": \"sell\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/stocks/transfers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"stocks",
+								"transfers"
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 02 Mar 2022 11:35:57 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "56"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"detail\": \"[Unsuccessful Transaction] No enough shares\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Stock History",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "History Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/stocks/history/aapl",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"stocks",
+								"history",
+								"aapl"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 02 Mar 2022 11:37:43 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "4778"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"stock_history\": {\n        \"name\": \"Apple Inc. Common Stock\",\n        \"symbol\": \"AAPL\",\n        \"records\": [\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:41:13.950678+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:41:18.173580+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:41:35.486069+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:41:43.967400+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:41:46.476722+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:42:08.632460+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:43:00.443091+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:43:08.755731+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:43:56.515645+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:43:59.779287+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:45:45.084386+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:45:49.879884+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:45:58.561556+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:46:04.079029+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:46:08.334486+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:46:16.999158+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:46:24.753996+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:46:27.235564+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:46:38.559166+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:46:41.514553+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:46:51.682144+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:47:03.553189+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:47:12.165061+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:47:40.839357+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:49:31.733737+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:49:49.540982+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:49:56.805462+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:50:54.258917+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:50:58.796498+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:04.603464+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:08.217600+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:12.791566+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:17.410040+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:19.178136+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:20.286964+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:23.115210+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:41.957841+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:51.275842+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:58.066456+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:51:59.875301+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:52:08.172815+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:52:17.807335+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:52:30.898844+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:53:23.654318+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:53:25.712119+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:53:29.006149+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:53:32.612353+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:53:38.245252+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:53:42.340222+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:53:44.616300+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:57:49.621203+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:57:52.913579+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:57:57.026804+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:58:04.052805+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:58:35.345953+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:58:37.963368+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:59:15.907509+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:59:37.795461+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T09:59:45.106934+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:00:38.018960+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:01:13.554326+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:01:59.229513+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:03:15.420742+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:03:55.258332+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:04:46.461312+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:05:00.112483+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:05:16.199575+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:05:27.755641+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:05:29.236234+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:05:30.814281+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:05:32.602423+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:05:34.176985+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:05:35.473046+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:06:32.658353+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:06:53.905901+00:00\"\n            },\n            {\n                \"price\": \"$163.2\",\n                \"date\": \"2022-03-02T10:08:13.795197+00:00\"\n            },\n            {\n                \"price\": \"$164.28\",\n                \"date\": \"2022-03-02T11:08:14.086600+00:00\"\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "No tracking Stock",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/stocks/history/tsla",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"stocks",
+								"history",
+								"tsla"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 02 Mar 2022 11:38:42 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "44"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"detail\": \"[No tracking] Company Not Found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "My Shares",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "My Shares Information",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/stocks/my",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"stocks",
+								"my"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 02 Mar 2022 11:40:06 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "240"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"stocks\": [\n        {\n            \"name\": \"Apple Inc. Common Stock\",\n            \"symbol\": \"AAPL\",\n            \"indicators_data\": {\n                \"margen_percentage\": \"+1.76%\",\n                \"held_shares\": 5,\n                \"total_value_shares\": \"$808.85\"\n            },\n            \"current_day_prices\": {\n                \"lowest\": \"$163.2\",\n                \"highest\": \"$164.28\",\n                \"average\": \"$163.21\"\n            }\n        }\n    ]\n}"
+				}
+			]
+		}
+	]
+}
